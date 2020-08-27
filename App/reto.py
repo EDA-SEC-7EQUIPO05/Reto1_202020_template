@@ -129,10 +129,37 @@ def conocerUnDirector (criteria,lst1,lst2):
 
     operacion=(promedio/contador)
 
-    respuesta=("El director: ")+str(criteria)+(" ")+("dirigió las siguientes peliculas: ")+str(lista1)+(" ")+(" lo cual es un total de: ")+str(contador)+(" ")+("peliculas")+(" ")+str("con un promedio de: ")+str(operacion)+(" ")+("en la votacion de sus peliculas")
+    respuesta=("El director: ")+str(criteria)+(" ")+("dirigió las siguientes peliculas: ")+str(lista1)+(" ")+("lo cual es un total de: ")+str(contador)+(" ")+("peliculas con un promedio de: ")+str(operacion)+(" ")+("en la votacion de sus peliculas")
     t1_stop = process_time() #tiempo final
     print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
     
+    return respuesta
+
+def entenderUnGenero (criteria,lst2):
+
+    lista=[]
+    contador=0
+    promedio=0
+
+    t1_start = process_time()
+    iterator=it.newIterator(lst2)
+    while it.hasNext(iterator):
+        element=it.next(iterator)
+        genero=element.get("genres")
+        if criteria==genero:
+            titulo=element.get("original_title")
+            lista.append(titulo)
+            votos=element.get("vote_count")
+            promedio+=float(votos)
+            contador+=1
+
+    resultado=round((promedio/contador),2)
+
+    respuesta=("Las peliculas del genero: ")+str(criteria)+(" ")+("son: ")+str(lista)+(" ")+("lo cual es un total de: ")+str(contador)+(" ")+("peliculas con un promedio de: ")+str(resultado)+(" ")+("en la votacion de sus peliculas")
+    
+    t1_stop = process_time() #tiempo final
+    print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
+
     return respuesta
 
 def main():
@@ -165,10 +192,12 @@ def main():
             elif int(inputs[0])==4: #opcion 4
                 pass
 
-            elif int(inputs[0])==3: #opcion 5
-                pass
+            elif int(inputs[0])==5: #opcion 5
+                criteria=str(input("Digite el genero que desea entender \n"))
+                respuesta=entenderUnGenero(criteria,lstmovies1)
+                print(respuesta)
 
-            elif int(inputs[0])==4: #opcion 6
+            elif int(inputs[0])==6: #opcion 6
                 pass
 
 
