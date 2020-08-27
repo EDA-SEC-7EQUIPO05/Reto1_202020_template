@@ -83,6 +83,41 @@ def loadMovies ():
     return lst
 
 
+def conocerActor (movies, casting, actor):
+    movies_id = []
+    pelis = []
+    directores = [[],[]]
+    suma = 0
+    for i in range(1,len(movies)+1):
+        movie = lt.getElement(casting, i)
+        actor_1 = movie['actor1_name']
+        actor_2 = movie['actor1_name']
+        actor_3 = movie['actor1_name']
+        actor_4 = movie['actor1_name']
+        actor_5 = movie['actor1_name']
+        if actor == actor_1 or actor == actor_2 or actor == actor_3 or actor == actor_4 or actor == actor_5:
+            movies_id.append[movie['id']]
+            if movie['director_name'] not in directores[0]
+                directores[0].append(movie['director_name'])
+                directores[1].append(1)
+            else:
+                for i in range(0,len(directores[0]))
+                    if directores[0][i] == movie['director_name']
+                        directores[1][i] += 1    
+    for i in range(1,len(movies)+1):
+        movie = lt.getElement(casting, i)
+        if movie['id'] in movies_id
+            pelis.append(movie['original_title'])
+            suma += int(movie['vote_average'])
+    mas_pelis = 0
+    for i in range(0, len(directores)):
+        if directores[1][i] > mas_pelis:
+            director = directores[0][i]
+            mas_pelis = directores[1][i]
+    rta = (pelis, len(pelis), round(suma/len(pelis),2),director )
+    return rta
+
+
 def main():
     """
     Método principal del programa, se encarga de manejar todos los metodos adicionales creados
