@@ -81,7 +81,7 @@ def loadCSVFile1 (file, cmpfunction):
     dialect = csv.excel()
     dialect.delimiter=";"
     try:
-        with open(  cf.data_dir + file, encoding="utf-8") as csvfile:
+        with open(  cf.data_dir + file, encoding="utf-8-sig") as csvfile:
             row = csv.DictReader(csvfile, dialect=dialect)
             for elemento in row: 
                 lt.addLast(lst,elemento)
@@ -96,9 +96,44 @@ def loadMovies ():
     return lst
 
 def loadMovies1 ():
-    lst1 = loadCSVFile1 ("theMoviesdb/AllMoviesDetailsCleaned.csv",compareRecordIds) 
-    print("Datos cargados, " + str(lt.size(lst1)) + " elementos cargados")
-    return lst1
+    lst = loadCSVFile1 ("theMoviesdb/AllMoviesDetailsCleaned.csv",compareRecordIds) 
+    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
+    return lst
+
+def conocerUnDirector (criteria,lst1,lst2):
+
+    lista = []
+    lista1=[]
+    contador=0
+    promedio=0
+
+    t1_start = process_time()
+    iterator=it.newIterator(lst1)
+    while it.hasNext(iterator):
+        element=it.next(iterator)
+        nombre=element.get("director_name")
+        if criteria==nombre:
+            id=element.get("id")
+            contador+=1
+            lista.append(id)
+
+    iterator2=it.newIterator(lst2)
+    while it.hasNext(iterator2):
+        element2=it.next(iterator2)
+        id2=element2.get("id")
+        if id2 in lista:
+            titulo=element2.get("original_title")
+            lista1.append(titulo)
+            calculo_promedio=element2.get("vote_average")
+            promedio+=float(calculo_promedio)
+
+    operacion=(promedio/contador)
+
+    respuesta=("El director: ")+str(criteria)+(" ")+("dirigió las siguientes peliculas: ")+str(lista1)+(" ")+(" lo cual es un total de: ")+str(contador)+(" ")+("peliculas")+(" ")+str("con un promedio de: ")+str(operacion)+(" ")+("en la votacion de sus peliculas")
+    t1_stop = process_time() #tiempo final
+    print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
+    
+    return respuesta
 
 def main():
     """
@@ -123,7 +158,9 @@ def main():
                 pass
 
             elif int(inputs[0])==3: #opcion 3
-                pass
+                criteria=str(input("Digite el nombre del director que busca \n"))
+                respuesta=conocerUnDirector(criteria,lstmovies,lstmovies1)
+                print(respuesta)
 
             elif int(inputs[0])==4: #opcion 4
                 pass
