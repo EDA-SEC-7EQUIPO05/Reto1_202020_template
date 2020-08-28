@@ -83,38 +83,41 @@ def loadMovies ():
     return lst
 
 
-def conocerActor (movies, casting, actor):
+def conocerActor (casting, movies, actor):
     movies_id = []
     pelis = []
     directores = [[],[]]
     suma = 0
-    for i in range(1,len(movies)+1):
+    t1=process_time()
+    for i in range(1,lt.size(casting)+1):
         movie = lt.getElement(casting, i)
         actor_1 = movie['actor1_name']
-        actor_2 = movie['actor1_name']
-        actor_3 = movie['actor1_name']
-        actor_4 = movie['actor1_name']
-        actor_5 = movie['actor1_name']
+        actor_2 = movie['actor2_name']
+        actor_3 = movie['actor3_name']
+        actor_4 = movie['actor4_name']
+        actor_5 = movie['actor5_name']
         if actor == actor_1 or actor == actor_2 or actor == actor_3 or actor == actor_4 or actor == actor_5:
-            movies_id.append[movie['id']]
-            if movie['director_name'] not in directores[0]
+            movies_id.append(movie['id'])
+            if movie['director_name'] not in directores[0]:
                 directores[0].append(movie['director_name'])
                 directores[1].append(1)
             else:
-                for i in range(0,len(directores[0]))
-                    if directores[0][i] == movie['director_name']
+                for i in range(0,len(directores[0])):
+                    if directores[0][i] == movie['director_name']:
                         directores[1][i] += 1    
-    for i in range(1,len(movies)+1):
-        movie = lt.getElement(casting, i)
-        if movie['id'] in movies_id
+    for i in range(1,lt.size(movies)+1):
+        movie = lt.getElement(movies, i)
+        if movie['id'] in movies_id:
             pelis.append(movie['original_title'])
-            suma += int(movie['vote_average'])
+            suma += float(movie['vote_average'])
     mas_pelis = 0
-    for i in range(0, len(directores)):
+    for i in range(0, len(directores[0])):
         if directores[1][i] > mas_pelis:
             director = directores[0][i]
             mas_pelis = directores[1][i]
-    rta = (pelis, len(pelis), round(suma/len(pelis),2),director )
+    t2 = process_time()
+    print("Tiempo de ejecición",(t2-t1),'segundos.')
+    rta = (pelis, len(pelis), round(suma/len(movies_id),2),director )
     return rta
 
 
@@ -143,7 +146,8 @@ def main():
                 pass
 
             elif int(inputs[0])==4: #opcion 4
-                pass
+                actor = input("¿Qué actor quiere conocer?\n")
+                print(conocerActor(lstmovies, lstmovies1, actor))
 
             elif int(inputs[0])==3: #opcion 5
                 pass
