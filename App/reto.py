@@ -106,7 +106,7 @@ def loadMovies ():
     return lst
 
 def loadMovies1():
-    lst = loadCSVFile1 ("themoviesdb/AllMoviesDetailsCleaned.csv",compareRecordIds) 
+    lst = loadCSVFile1 ("themoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
 
