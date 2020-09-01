@@ -68,7 +68,20 @@ def loadCSVFile (file, cmpfunction):
     dialect = csv.excel()
     dialect.delimiter=";"
     try:
-        with open(  cf.data_dir + file, encoding="utf-8") as csvfile:
+        with open(cf.data_dir + file, encoding="utf-8-sig") as csvfile:
+            row = csv.DictReader(csvfile, dialect=dialect)
+            for elemento in row: 
+                lt.addLast(lst,elemento)
+    except:
+        print("Hubo un error con la carga del archivo")
+    return lst
+
+def loadCSVFile1 (file, cmpfunction):
+    lst=lt.newList("ARRAY_LIST", cmpfunction)
+    dialect = csv.excel()
+    dialect.delimiter=";"
+    try:
+        with open(  cf.data_dir + file, encoding="utf-8-sig") as csvfile:
             row = csv.DictReader(csvfile, dialect=dialect)
             for elemento in row: 
                 lt.addLast(lst,elemento)
@@ -78,9 +91,57 @@ def loadCSVFile (file, cmpfunction):
 
 
 def loadMovies ():
-    lst = loadCSVFile("theMoviesdb/movies-small.csv",compareRecordIds) 
+    lst = loadCSVFile("theMoviesdb/AllMoviesCastingRaw.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
+
+def loadMovies1 ():
+    lst = loadCSVFile1 ("theMoviesdb/AllMoviesDetailsCleaned.csv",compareRecordIds) 
+    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
+    return lst
+
+
+
+def conocerActor (casting, movies, actor):
+    movies_id = []
+    pelis = []
+    directores = [[],[]]
+    suma = 0
+    t1=process_time()
+    for i in range(1,lt.size(casting)+1):
+        movie = lt.getElement(casting, i)
+        actor_1 = movie['actor1_name']
+        actor_2 = movie['actor2_name']
+        actor_3 = movie['actor3_name']
+        actor_4 = movie['actor4_name']
+        actor_5 = movie['actor5_name']
+        if actor == actor_1 or actor == actor_2 or actor == actor_3 or actor == actor_4 or actor == actor_5:
+            movies_id.append(movie['id'])
+            if movie['director_name'] not in directores[0]:
+                directores[0].append(movie['director_name'])
+                directores[1].append(1)
+            else:
+                for i in range(0,len(directores[0])):
+                    if directores[0][i] == movie['director_name']:
+                        directores[1][i] += 1
+                        break    
+    for i in range(1,lt.size(movies)+1):
+        movie = lt.getElement(movies, i)
+        if movie['id'] in movies_id:
+            pelis.append(movie['original_title'])
+            suma += float(movie['vote_average'])
+    mas_pelis = 0
+    for i in range(0, len(directores[0])):
+        if directores[1][i] > mas_pelis:
+            director = directores[0][i]
+            mas_pelis = directores[1][i]
+    t2 = process_time()
+    print("Tiempo de ejecición",(t2-t1),'segundos.')
+    if len(pelis)!=0:
+        rta = (pelis, len(pelis), round(suma/len(movies_id),2),director )
+    else:
+        rta = None
+    return rta
 
 
 def main():
@@ -100,6 +161,7 @@ def main():
 
             if int(inputs[0])==1: #opcion 1
                 lstmovies = loadMovies()
+                lstmovies1 = loadMovies1()
 
             elif int(inputs[0])==2: #opcion 2
                 pass
@@ -108,7 +170,8 @@ def main():
                 pass
 
             elif int(inputs[0])==4: #opcion 4
-                pass
+                actor = input("¿Qué actor quiere conocer?\n")
+                print(conocerActor(lstmovies, lstmovies1, actor))
 
             elif int(inputs[0])==3: #opcion 5
                 pass
