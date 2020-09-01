@@ -76,17 +76,30 @@ def loadCSVFile (file, cmpfunction):
         print("Hubo un error con la carga del archivo")
     return lst
 
-def loadFile1():
-    return loadCSVFile("theMoviesdb/AllMoviesCastingRaw.csv", compareRecordIds)
+def loadCSVFile1 (file, cmpfunction):
+    lst=lt.newList("ARRAY_LIST", cmpfunction)
+    dialect = csv.excel()
+    dialect.delimiter=";"
+    try:
+        with open(  cf.data_dir + file, encoding="utf-8-sig") as csvfile:
+            row = csv.DictReader(csvfile, dialect=dialect)
+            for elemento in row: 
+                lt.addLast(lst,elemento)
+    except:
+        print("Hubo un error con la carga del archivo")
+    return lst
 
-
-def loadFile2():
-    return loadCSVFile("theMoviesdb/AllMoviesDetailsCleaned.csv", compareRecordIds)
 
 def loadMovies ():
-    lst = loadCSVFile("theMoviesdb/movies-small.csv",compareRecordIds) 
+    lst = loadCSVFile("theMoviesdb/AllMoviesCastingRaw.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
+
+def loadMovies1 ():
+    lst = loadCSVFile1 ("theMoviesdb/AllMoviesDetailsCleaned.csv",compareRecordIds) 
+    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
+    return lst
+
 
 
 def conocerActor (casting, movies, actor):
@@ -147,8 +160,8 @@ def main():
         if len(inputs)>0:
 
             if int(inputs[0])==1: #opcion 1
-                lstmovies = loadFile1()
-                lstmovies1 = loadFile2()
+                lstmovies = loadMovies()
+                lstmovies1 = loadMovies1()
 
             elif int(inputs[0])==2: #opcion 2
                 pass
