@@ -68,7 +68,7 @@ def loadCSVFile (file, cmpfunction):
     dialect = csv.excel()
     dialect.delimiter=";"
     try:
-        with open(  cf.data_dir + file, encoding="utf-8") as csvfile:
+        with open(cf.data_dir + file, encoding="utf-8-sig") as csvfile:
             row = csv.DictReader(csvfile, dialect=dialect)
             for elemento in row: 
                 lt.addLast(lst,elemento)
@@ -76,6 +76,12 @@ def loadCSVFile (file, cmpfunction):
         print("Hubo un error con la carga del archivo")
     return lst
 
+def loadFile1():
+    return loadCSVFile("theMoviesdb/AllMoviesCastingRaw.csv", compareRecordIds)
+
+
+def loadFile2():
+    return loadCSVFile("theMoviesdb/AllMoviesDetailsCleaned.csv", compareRecordIds)
 
 def loadMovies ():
     lst = loadCSVFile("theMoviesdb/movies-small.csv",compareRecordIds) 
@@ -104,7 +110,8 @@ def conocerActor (casting, movies, actor):
             else:
                 for i in range(0,len(directores[0])):
                     if directores[0][i] == movie['director_name']:
-                        directores[1][i] += 1    
+                        directores[1][i] += 1
+                        break    
     for i in range(1,lt.size(movies)+1):
         movie = lt.getElement(movies, i)
         if movie['id'] in movies_id:
@@ -117,7 +124,10 @@ def conocerActor (casting, movies, actor):
             mas_pelis = directores[1][i]
     t2 = process_time()
     print("Tiempo de ejecición",(t2-t1),'segundos.')
-    rta = (pelis, len(pelis), round(suma/len(movies_id),2),director )
+    if len(pelis)!=0:
+        rta = (pelis, len(pelis), round(suma/len(movies_id),2),director )
+    else:
+        rta = None
     return rta
 
 
@@ -137,7 +147,8 @@ def main():
         if len(inputs)>0:
 
             if int(inputs[0])==1: #opcion 1
-                lstmovies = loadMovies()
+                lstmovies = loadFile1()
+                lstmovies1 = loadFile2()
 
             elif int(inputs[0])==2: #opcion 2
                 pass
